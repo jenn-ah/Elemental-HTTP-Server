@@ -18,31 +18,82 @@ const server = http.createServer((request, response) => {
     });
   };
 
-  switch (uri) {
-    case '/':
-    case '/index.html':
+  // function writeF(fileLocation, conType, statusCode, reasonPhrase) {
+  //   fs.writeFile(fileLocation, (err, data) => {
+  //     if (err) throw err;
+  //     response.setHeader(`Content-Type`, conType);
+  //     response.setHeader(`Content-Length`, data.length);
+  //     response.writeHead(statusCode, reasonPhrase);
+  //     response.write(data);
+  //     response.end();
+  //   });
+  // };
 
-      readF('./public/index.html', 'text/html', 200, 'OK');
+  //testing nested switch cases
+  switch (reqMethod) {
+    case 'GET':
+      switch (uri) {
+        case '/': readF('./public/index.html', 'text/html', 200, 'OK');
+          break;
+        case '/index.html': readF('./public/index.html', 'text/html', 200, 'OK');
+          break;
+        case '/hydrogen.html': readF('./public/hydrogen.html', 'text/html', 200, 'OK');
+          break;
+        case '/helium.html': readF('./public/helium.html', 'text/html', 200, 'OK');
+          break;
+        case '/css/styles.css': readF('./public/css/styles.css', 'text/css', 200, 'OK');
+          break;
+        default: readF('./public/404.html', 'text/html', 404, 'Not Found');
+          break;
+      }
       break;
 
-    case '/hydrogen.html':
+    case 'POST':
+      switch (uri) {
+        case '/elements':
 
-      readF('./public/hydrogen.html', 'text/html', 200, 'OK');
+          console.log('request yo,', request);
+          // fs.writeFile('message.txt', data, (err) => {
+          //   if (err) throw err;
+
+          //   response.setHeader(`Content-Type`, 'application/x-www-form-urlencoded');
+          //   response.setHeader(`Content-Length`, data.length);
+          //   //response.writeHead(200, reasonPhrase);
+          //   response.write(data);
+          //   response.end();
+
+
+
+
+          //   console.log('File has been saved');
+          // });
+
+
+          // fs.writeFile(fileLocation, (err, data) => {
+          //       if (err) throw err;
+          //       response.setHeader(`Content-Type`, conType);
+          //       response.setHeader(`Content-Length`, data.length);
+          //       response.writeHead(statusCode, reasonPhrase);
+          //       response.write(data);
+          //       response.end();
+          //     });
+
+
+          response.end();
+      }
       break;
 
-    case '/helium.html':
+    case 'PUT':
 
-      readF('./public/helium.html', 'text/html', 200, 'OK');
       break;
 
-    case '/css/styles.css':
+    case 'DELETE':
 
-      readF('./public/css/styles.css', 'text/css', 200, 'OK');
       break;
 
     default:
-
-      readF('./public/404.html', 'text/html', 404, 'Not Found');
+      //write else code
+      break;
   }
 });
 
