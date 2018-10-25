@@ -7,27 +7,18 @@ const server = http.createServer((request, response) => {
   //const res = response;
   let uri = request.url;
   let reqMethod = request.method;
-  const reqVersion = request.httpVersion;
+  //const reqVersion = request.httpVersion;
 
 
-  // response.on('data', (chunk) => {
-  //   console.log(`Body:, ${chunk}`);
-  // })
-
-  //console.log('this is my request', request);
-
-  //testing nested switch cases
-  //console.log('reqMethod', reqMethod);
   switch (reqMethod) {
     case 'GET':
-
       getHandler(uri, response);
-      // response.end();
       break;
 
     case 'POST':
-      //switch (uri) {
-      case '/elements':
+
+      // case '/elements':
+
       request.on('data', (chunk) => {
         let body = qs.parse(`${chunk}`);
         //console.log('elements', body);
@@ -63,11 +54,70 @@ const server = http.createServer((request, response) => {
             response.end();
           }
         });
-
         // response.end();
       });
 
-      //}
+      fs.readdir('./public', (err, files) => {
+        if (err) throw err;
+
+        let listElement = '';
+        files.forEach((file) => {
+          listElement += `<li>
+          <a href="/${file}">${file}</a>
+          </li>`
+        });
+
+        let newIndex = `<!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <title>The Elements</title>
+        <link rel="stylesheet" href="/css/styles.css">
+        </head>
+        <body>
+        <h1>The Elements</h1>
+        <h2>These are all the known elements.</h2>
+        <h3>These are 2</h3>
+        <ol> ${listElement}
+        </ol>
+        </body>
+        </html>`;
+
+
+        // fs.writeFile('./public/index.html', newIndex, (err) => {
+        //   if (err) {
+        //     fs.readFile(`./public/404.html`, (err, data) => {
+        //       if (err) throw err;
+        //       response.setHeader(`Content-Type`, `text/html`);
+        //       response.writeHead(404, 'Not Found');
+        //       response.write(data);
+        //       response.end();
+        //     });
+        //   } else {
+        //     response.setHeader(`Content-Type`, `text/html`);
+        //     response.writeHead(200, 'OK');
+        //     response.write(data);
+        //     response.end();
+        //   }
+        // });
+        //})
+
+
+
+        response.setHeader('Content-Type', 'text/html');
+        response.setHeader('Content-Length', newIndex.length);
+        response.writeHead(200, 'OK');
+        response.write(newIndex);
+        response.end();
+
+        console.log('newIndex', newIndex);
+
+        //response.end();
+      });
+
+
+
+
       break;
 
     case 'PUT':
@@ -86,7 +136,7 @@ const server = http.createServer((request, response) => {
 });
 
 function getHandler(uri, res) {
-  //readF()
+
   fs.readFile(`./public${uri}`, (err, data) => {
     if (err) {
       fs.readFile(`./public/404.html`, (err, data) => {
