@@ -27,8 +27,7 @@ const server = http.createServer((request, response) => {
 
     case 'POST':
       //switch (uri) {
-      //case '/elements':
-
+      case '/elements':
       request.on('data', (chunk) => {
         let body = qs.parse(`${chunk}`);
         //console.log('elements', body);
@@ -62,11 +61,10 @@ const server = http.createServer((request, response) => {
             response.writeHead(200, 'OK');
             response.write(`{ "success" : true }`);
             response.end();
-
           }
         });
 
-       // response.end();
+        // response.end();
       });
 
       //}
